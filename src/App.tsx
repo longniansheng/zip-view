@@ -2,9 +2,12 @@ import React from "react";
 import { view } from "./utils";
 
 function App() {
+  const hanleClick = async () => {
+    const data = await view();
+  };
   return (
     <div className="App">
-      <button onClick={view}>预览zip</button>
+      <button onClick={hanleClick}>预览zip</button>
     </div>
   );
 }
