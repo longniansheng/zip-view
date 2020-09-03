@@ -1,3 +1,4 @@
 import { view } from "./view";
+import { zipFile, zip, zipAllFile } from "./zip";
 
-export { view };
+export { view, zipFile, zip, zipAllFile };

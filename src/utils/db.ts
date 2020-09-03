@@ -26,7 +26,7 @@ const DB = {
     });
   },
 
-  Get(key: string) {
+  Get(key: string): Promise<{ fileName: string; content: string | Blob }> {
     return new Promise((resolve, reject) => {
       let db = indexedDB.open("view-zip", 2);
       db.onsuccess = () => {
@@ -34,6 +34,29 @@ const DB = {
           .transaction("zip-file", "readonly")
           .objectStore("zip-file")
           .get(key);
+        db.result.close();
+
+        req.onsuccess = (e: any) => {
+          resolve(e.target.result);
+        };
+        req.onerror = (err) => {
+          reject(err);
+        };
+      };
+      db.onerror = (e) => {
+        reject(e);
+      };
+    });
+  },
+
+  GetAll(): Promise<Array<{ fileName: string; content: string | Blob }>> {
+    return new Promise((resolve, reject) => {
+      let db = indexedDB.open("view-zip", 2);
+      db.onsuccess = () => {
+        let req = db.result
+          .transaction("zip-file", "readonly")
+          .objectStore("zip-file")
+          .getAll();
         db.result.close();
 
         req.onsuccess = (e: any) => {

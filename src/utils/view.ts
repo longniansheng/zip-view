@@ -1,9 +1,8 @@
-import JSzip from "jszip";
+import JSZip from "jszip";
 import http from "@sinoui/http";
 import DB from "./db";
-import { Base64 } from "js-base64";
 
-const ZIP = new JSzip();
+const ZIP = new JSZip();
 
 export async function view() {
   return http
@@ -12,24 +11,23 @@ export async function view() {
     })
     .then((data: any) => {
       DB.init();
-      return ZIP.loadAsync(data).then((zip) => {
+      return ZIP.loadAsync(data).then((zip: JSZip) => {
         zip.forEach((relativePath: string, zipEntry: any) => {
+          console.log(zipEntry);
           const { name: fileName, dir } = zipEntry;
-
           if (!dir) {
+            // TODO: 生成相应的文件
+            // 应该有相应的配置判断文件的保存类型（是否是二进制文件）
             zip
               .file(fileName)
               ?.async("base64")
-              .then((text) => {
+              .then((text: string) => {
                 const zipFile = {
                   fileName,
                   content: text,
                 };
 
                 DB.Add(zipFile);
-                DB.Get(fileName).then((data: any) => {
-                  console.log(Base64.decode(data.content));
-                });
               });
           }
         });
