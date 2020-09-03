@@ -1,20 +1,31 @@
-export default function renderFileTree(data: any) {
-  let root = { name: "root", children: [] };
+import JSZip from "jszip";
+import { DataNode } from "antd/es/tree";
 
-  data.forEach((file: any) => {
+export default function renderFileTree(data: JSZip.JSZipObject[]) {
+  let root: DataNode = {
+    key: "root",
+    title: "root",
+    children: [],
+  };
+
+  data.forEach((file: JSZip.JSZipObject) => {
     const { name } = file;
 
-    const node = {
-      id: name,
+    const node: DataNode = {
+      key: name,
       title: getTitle(name),
+      isLeaf: !file.dir,
     };
 
-    let item = root.children.find((f: any) =>
-      file.name.includes(f.name)
-    ) as any;
+    let item = root.children?.find((f: DataNode) =>
+      file.name.includes(f.key as string)
+    );
     let cur = item ? item : root;
+
     while (item) {
-      const temp = item?.children?.find((f: any) => file.name.includes(f.name));
+      const temp = item.children?.find((f: DataNode) =>
+        file.name.includes(f.key as string)
+      );
       if (temp) {
         cur = temp;
       }
