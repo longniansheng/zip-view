@@ -16,7 +16,7 @@ const DB = {
         db.result
           .transaction("zip-file", "readwrite")
           .objectStore("zip-file")
-          .add(payload);
+          .put(payload);
         db.result.close();
         resolve();
       };
