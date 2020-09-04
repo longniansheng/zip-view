@@ -1,5 +1,6 @@
 import JSZip from "jszip";
 import { DataNode } from "antd/es/tree";
+import settings from "./setting";
 
 export default function renderFileTree(data: JSZip.JSZipObject[]) {
   let root: DataNode = {
@@ -15,6 +16,9 @@ export default function renderFileTree(data: JSZip.JSZipObject[]) {
       key: name,
       title: getTitle(name),
       isLeaf: !file.dir,
+      selectable: !settings.some(
+        (item) => item.path === name && item.bufferType !== "string"
+      ),
     };
 
     let item = root.children?.find((f: DataNode) =>

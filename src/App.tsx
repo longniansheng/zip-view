@@ -3,7 +3,7 @@ import { Button, Modal } from "antd";
 import { DataNode, EventDataNode } from "antd/es/tree";
 import styled from "styled-components";
 import Tree from "./Tree";
-import { view, zip, zipAllFile } from "./utils";
+import { view, zip, zipAllFile, zipFile } from "./utils";
 import renderFileTree from "./utils/renderFileTree";
 import DB from "./utils/db";
 import { Base64 } from "js-base64";
@@ -26,14 +26,14 @@ function App() {
   const handleView = async () => {
     const data = await view();
     const root = renderFileTree(data) as DataNode;
-    console.log(root.children);
     setNodes(root.children as DataNode[]);
     setVisible(true);
     setContent("");
   };
 
   const handleDownload = async () => {
-    await zipAllFile();
+    await zipFile("dir1/demo.docx");
+    // await zipAllFile();
     zip();
   };
 
